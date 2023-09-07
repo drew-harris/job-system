@@ -24,4 +24,11 @@ void CompileJob::Execute() {
 
     // close pipe and get return code
     this->returnCode = pclose(pipe);
+    
+    std::cout << "Job " << this->GetUniqueID() << " has been executed" << std::endl;
+}
+
+void CompileJob::JobCompleteCallback() {
+    std::cout << "Compile job " << this->GetUniqueID() << " Return code" << this->returnCode << std::endl;
+    std::cout << "Compile Job " << this->GetUniqueID() << " Output: \n" << this->output << std::endl;
 }
