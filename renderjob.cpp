@@ -18,3 +18,8 @@ void RenderJob::Execute() {
     std::cout << "Job: " << this->GetUniqueID() << "has been executed"
               << std::endl;
 }
+
+void RenderJob::JobCompleteCallback() {
+    std::cout << "Job: " << this->GetUniqueID() << "has been completed"
+        << "calculated sum: " << this->data[0] << std::endl;
+}
