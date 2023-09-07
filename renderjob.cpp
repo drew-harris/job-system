@@ -15,6 +15,7 @@ void RenderJob::Execute() {
         total += *it;
     }
 
+    data[0] = total; // [0] is the sum of the vector
     std::cout << "Job: " << this->GetUniqueID() << "has been executed"
               << std::endl;
 }
