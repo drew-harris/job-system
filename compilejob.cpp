@@ -7,6 +7,6 @@ void CompileJob::Execute() {
     std::array<char, 128> buffer;
     std::string command = "make automated";
 
-    // Redirect
+    // Redirect cerr to cout
     command.append(" 2>&1");
 }
