@@ -16,4 +16,8 @@ void CompileJob::Execute() {
         std::cout << "popen Failed: Error: failed to open pipe" << std::endl;
         return;
     }
+
+    while(fgets(buffer.data(), 128, pipe) != nullptr) {
+        this->output.append(buffer.data());
+    }
 }
