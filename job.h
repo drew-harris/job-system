@@ -18,9 +18,14 @@ class Job {
 
     virtual ~Job() {}
 
-    virtual void Execute() = 0;
+    virtual void Execute() = 0; // Must inheirit execute function
     virtual void JobCompleteCallback(){};
 
     int GetUniqueID() const { return m_jobID; }
 
+  private:
+    int m_jobID = -1;
+    int m_jobType = -1;
+
+    unsigned long m_jobChannels = 0xFFFFFFFF;
 };
