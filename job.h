@@ -1,0 +1,26 @@
+#pragma once
+#include <deque>
+#include <map>
+#include <mutex>
+#include <thread>
+#include <vector>
+
+class Job {
+    friend class JobSystem;
+    friend class JobWorkerThread;
+
+  public:
+    Job(unsigned long jobChannels = 0xFFFFFFFF, int jobType = -1)
+        : m_jobChannels(jobChannels), m_jobType(jobType) {
+        static int s_nextJobID = 0;
+        m_jobID = s_nextJobID++;
+    }
+
+    virtual ~Job() {}
+
+    virtual void Execute() = 0;
+    virtual void JobCompleteCallback(){};
+
+    int GetUniqueID() const { return m_jobID; }
+
+};
