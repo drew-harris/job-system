@@ -20,4 +20,6 @@ void CompileJob::Execute() {
     while(fgets(buffer.data(), 128, pipe) != nullptr) {
         this->output.append(buffer.data());
     }
+
+    this->returnCode = pclose(pipe);
 }
