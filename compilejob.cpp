@@ -9,4 +9,6 @@ void CompileJob::Execute() {
 
     // Redirect cerr to cout
     command.append(" 2>&1");
+
+    FILE *pipe = popen(command.c_str(), "r");
 }
