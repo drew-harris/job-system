@@ -1,4 +1,5 @@
 #include "job.h"
+#include <string>
 
 class CompileJob : public Job {
   public:
