@@ -4,9 +4,10 @@
 class JobSystem;
 
 class JobWorkerThread {
-  friend class JobSystem;
+    friend class JobSystem;
 
   private:
-  JobWorkerThread(const char* uniqueName, unsigned long workerJobChannels, JobSystem* job);
-  ~JobWorkerThread();
+    JobWorkerThread(const char *uniqueName, unsigned long workerJobChannels,
+                    JobSystem *jobSystem);
+    ~JobWorkerThread();
 };
