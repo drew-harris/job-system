@@ -32,7 +32,7 @@ class JobSystem {
     // Not implemented
     JobSystem();
     ~JobSystem();
-    static JobSystem CreateOrGet();
+    static JobSystem* CreateOrGet();
     static void Destroy();
     int totalJobs = 0;
 
@@ -51,7 +51,7 @@ class JobSystem {
 
     static JobSystem *s_jobSystem;
     std::vector<JobWorkerThread *> m_workerThreads;
-    mutable std::mutex m_jobSystemMutex;
+    mutable std::mutex m_workerThreadsMutex;
 
     std::deque<Job *> m_jobsQueued;
     std::deque<Job *> m_jobsRunning;
@@ -62,6 +62,6 @@ class JobSystem {
     mutable std::mutex m_jobCompletedMutex;
 
     std::vector<JobHistoryEntry> m_jobHistory;
-    mutable int m_JobHistoryLowestActiveIndex = 0;
+    mutable int m_JobHistoryLowestActiveIndex = 0; // keeps track of oldest job
     mutable std::mutex m_jobHistoryMutex;
 };
