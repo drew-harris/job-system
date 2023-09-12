@@ -29,25 +29,38 @@ void JobWorkerThread::Startup() {
 }
 
 void JobWorkerThread::Work() {
-    while(!IsStopping()) {
+    while (!IsStopping()) {
         m_workerStatusMutex.lock();
         unsigned long workerJobChannels = m_workerJobChannels;
         m_workerStatusMutex.unlock();
 
-        Job* job = m_jobSystem->claimAJob(m_workerJobChannels);
-        if(job) {
-            job-> Execute();
+        Job *job = m_jobSystem->claimAJob(m_workerJobChannels);
+        if (job) {
+            job->Execute();
             m_jobSystem->onJobCompleted(*job);
         }
 
         std::this_thread::sleep_for(std::chrono::microseconds(1));
-
     }
 }
-
 
 void JobWorkerThread::Shutdown() {
     m_workerStatusMutex.lock();
     m_isStopping = true;
+    m_workerStatusMutex.unlock();
+}
+
+bool JobWorkerThread::IsStopping() const {
+    bool isStopping = false;
+    m_workerStatusMutex.lock();
+    isStopping = m_isStopping;
+    m_workerStatusMutex.unlock();
+
+    return isStopping;
+}
+
+void JobWorkerThread::setWorkerJobChannels(unsigned long workerJobChannels) {
+    m_workerStatusMutex.lock();
+    m_workerJobChannels = workerJobChannels;
     m_workerStatusMutex.unlock();
 }
