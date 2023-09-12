@@ -44,3 +44,10 @@ void JobWorkerThread::Work() {
 
     }
 }
+
+
+void JobWorkerThread::Shutdown() {
+    m_workerStatusMutex.lock();
+    m_isStopping = true;
+    m_workerStatusMutex.unlock();
+}

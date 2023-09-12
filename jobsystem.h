@@ -1,7 +1,7 @@
 #include "job.h"
 class JobSystem {
   public:
-    Job* claimAJob(unsigned long channels);
+    // Not implemented
+    Job *claimAJob(unsigned long channels);
     void onJobCompleted(Job &job);
-  
 };
