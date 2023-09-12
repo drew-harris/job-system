@@ -37,7 +37,7 @@ void JobWorkerThread::Work() {
         Job *job = m_jobSystem->claimAJob(m_workerJobChannels);
         if (job) {
             job->Execute();
-            m_jobSystem->onJobCompleted(*job);
+            m_jobSystem->onJobCompleted(job);
         }
 
         std::this_thread::sleep_for(std::chrono::microseconds(1));
