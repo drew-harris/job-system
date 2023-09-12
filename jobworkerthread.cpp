@@ -64,3 +64,8 @@ void JobWorkerThread::setWorkerJobChannels(unsigned long workerJobChannels) {
     m_workerJobChannels = workerJobChannels;
     m_workerStatusMutex.unlock();
 }
+
+ void JobWorkerThread::WokerThreadMain(JobWorkerThread *workerThreadObject){
+    JobWorkerThread* thisWorker = workerThreadObject;
+    thisWorker->Work();
+};

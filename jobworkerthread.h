@@ -19,7 +19,7 @@ class JobWorkerThread {
 
     bool IsStopping() const;
     void setWorkerJobChannels(unsigned long workerJobChannels);
-    static void WokerThreadMain(void *workThreadObject);
+    static void WokerThreadMain(JobWorkerThread *workerThreadObject);
 
   private:
     const char *m_uniqueName;
