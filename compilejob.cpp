@@ -32,5 +32,3 @@ void CompileJob::JobCompleteCallback() {
     std::cout << "Compile job " << this->GetUniqueID() << " Return code" << this->returnCode << std::endl;
     std::cout << "Compile Job " << this->GetUniqueID() << " Output: \n" << this->output << std::endl;
 }
-CompileJob::CompileJob(unsigned long jobChannels, int jobType)
-    : Job(jobChannels, jobType){};
