@@ -1,5 +1,6 @@
 #include "jobsystem.h"
 #include "jobworkerthread.h"
+#include <vector>
 
 JobSystem *JobSystem::s_jobSystem = nullptr;
 
@@ -47,4 +48,26 @@ void JobSystem::CreateWorkerThread(const char *uniqueName,
     m_workerThreads.push_back(newWorker);
     m_workerThreadsMutex.unlock();
     m_workerThreads.back()->Startup();
+}
+
+void JobSystem::DestroyWorkerThread(const char *uniqueName) {
+    m_workerThreadsMutex.lock();
+
+    JobWorkerThread *doomedWorker = nullptr;
+
+    std::vector<JobWorkerThread *>::iterator it = m_workerThreads.begin();
+
+    for (; it != m_workerThreads.end(); ++it) {
+        if (strcmp((*it)->m_uniqueName, uniqueName) == 0) {
+            doomedWorker = *it;
+            m_workerThreads.erase(it);
+            break;
+        }
+    }
+
+    if (doomedWorker) {
+        doomedWorker->Shutdown();
+    }
+
+    m_workerThreadsMutex.unlock();
 }
