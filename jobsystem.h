@@ -32,7 +32,7 @@ class JobSystem {
     // Not implemented
     JobSystem();
     ~JobSystem();
-    static JobSystem* CreateOrGet();
+    static JobSystem *CreateOrGet();
     static void Destroy();
     int totalJobs = 0;
 
@@ -47,7 +47,7 @@ class JobSystem {
 
   private:
     Job *claimAJob(unsigned long channels);
-    void onJobCompleted(Job *jobJustExecuted);
+    void OnJobCompleted(Job *jobJustExecuted);
     void FinishCompletedJobs();
     void FinishJob(int jobId);
     static JobSystem *s_jobSystem;

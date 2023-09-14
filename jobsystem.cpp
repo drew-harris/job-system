@@ -149,9 +149,59 @@ void JobSystem::FinishJob(int jobId) {
 
         m_jobHistoryMutex.lock();
 
-        m_jobHistory[thisCompletedJob->m_jobID].m_jobStatus = JobStatus::RETIRED;
+        m_jobHistory[thisCompletedJob->m_jobID].m_jobStatus =
+            JobStatus::RETIRED;
         m_jobHistoryMutex.unlock();
 
         delete thisCompletedJob;
     }
+}
+
+void JobSystem::OnJobCompleted(Job *jobJustExected) {
+    totalJobs++;
+    m_jobsCompletedMutex.lock();
+    m_jobsRunningMutex.lock();
+
+    std::deque<Job *>::iterator runningJobItr = m_jobsRunning.begin();
+    for (; runningJobItr != m_jobsRunning.end(); ++runningJobItr) {
+        if (jobJustExected == *runningJobItr) {
+            m_jobHistoryMutex.lock();
+            m_jobsRunning.erase(runningJobItr);
+            m_jobsCompleted.push_back(jobJustExected);
+            m_jobHistory[jobJustExected->m_jobID].m_jobStatus =
+                JobStatus::COMPLETED;
+
+            m_jobHistoryMutex.unlock();
+            break;
+        }
+    }
+    m_jobsCompletedMutex.unlock();
+    m_jobsRunningMutex.unlock();
+}
+
+Job *JobSystem::claimAJob(unsigned long channels) {
+    m_jobsQueuedMutex.lock();
+    m_jobsRunningMutex.lock();
+
+    Job* claimedJob = nullptr;
+
+    std::deque<Job*>::iterator queuedJobIter  = m_jobsQueued.begin();
+    for (; queuedJobIter != m_jobsQueued.end(); ++queuedJobIter) {
+        Job* queuedJob = *queuedJobIter;
+
+        if ((queuedJob->m_jobChannels & channels) != 0 ) {
+            claimedJob = queuedJob;
+
+            m_jobHistoryMutex.lock();
+            m_jobHistory[claimedJob->m_jobID].m_jobStatus = JobStatus::RUNNING;
+            m_jobHistoryMutex.unlock();
+            m_jobsQueued.erase(queuedJobIter);
+            break;
+        }
+    }
+
+    m_jobsRunningMutex.unlock();
+    m_jobsQueuedMutex.unlock();
+
+    return claimedJob;
 }
