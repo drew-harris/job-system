@@ -8,11 +8,11 @@ constexpr int JOB_TYPE_ANY = -1;
 class JobWorkerThread;
 
 enum class JobStatus {
-    JOB_STATUS_NEVER_SEEN,
-    JOB_STATUS_QUEUED,
-    JOB_STATUS_RUNNING,
-    JOB_STATUS_COMPLETED,
-    JOB_STATUS_RETIRED,
+    NEVER_SEEN,
+    QUEUED,
+    RUNNING,
+    COMPLETED,
+    RETIRED,
     NUM_JOB_STATUSES
 };
 
@@ -20,7 +20,7 @@ struct JobHistoryEntry {
     JobHistoryEntry(int jobType, JobStatus jobStatus)
         : m_jobType(jobType), m_jobStatus(jobStatus) {}
     int m_jobType = -1;
-    JobStatus m_jobStatus = JobStatus::JOB_STATUS_NEVER_SEEN;
+    JobStatus m_jobStatus = JobStatus::NEVER_SEEN;
 };
 
 class Job;
@@ -48,7 +48,8 @@ class JobSystem {
   private:
     Job *claimAJob(unsigned long channels);
     void onJobCompleted(Job *jobJustExecuted);
-
+    void FinishCompletedJobs();
+    void FinishJob(int jobId);
     static JobSystem *s_jobSystem;
     std::vector<JobWorkerThread *> m_workerThreads;
     mutable std::mutex m_workerThreadsMutex;
@@ -57,9 +58,9 @@ class JobSystem {
     std::deque<Job *> m_jobsRunning;
     std::deque<Job *> m_jobsCompleted;
 
-    mutable std::mutex m_jobQueuedMutex;
-    mutable std::mutex m_jobRunningMutex;
-    mutable std::mutex m_jobCompletedMutex;
+    mutable std::mutex m_jobsQueuedMutex;
+    mutable std::mutex m_jobsRunningMutex;
+    mutable std::mutex m_jobsCompletedMutex;
 
     std::vector<JobHistoryEntry> m_jobHistory;
     mutable int m_JobHistoryLowestActiveIndex = 0; // keeps track of oldest job
