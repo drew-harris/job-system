@@ -16,10 +16,10 @@ class Job {
         m_jobID = s_nextJobID++;
     }
 
-    virtual ~Job() {}
+    virtual ~Job() {};
 
     virtual void Execute() = 0; // Must inheirit execute function
-    virtual void JobCompleteCallback(){};
+    virtual void JobCompleteCallback() = 0;
 
     int GetUniqueID() const { return m_jobID; }
 

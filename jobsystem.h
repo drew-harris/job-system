@@ -43,12 +43,12 @@ class JobSystem {
     void QueueJob(Job *job);
 
     JobStatus GetJobStatus(int jobID) const;
+    void FinishCompletedJobs();
     bool IsJobComplete(int jobID) const;
 
   private:
     Job *claimAJob(unsigned long channels);
     void OnJobCompleted(Job *jobJustExecuted);
-    void FinishCompletedJobs();
     void FinishJob(int jobId);
     static JobSystem *s_jobSystem;
     std::vector<JobWorkerThread *> m_workerThreads;
