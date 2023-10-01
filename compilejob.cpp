@@ -12,23 +12,26 @@ void CompileJob::Execute() {
 
     // open pipe and run command
     FILE *pipe = popen(command.c_str(), "r");
-    if(!pipe) {
+    if (!pipe) {
         std::cout << "popen Failed: Error: failed to open pipe" << std::endl;
         return;
     }
 
     // read till end of process:
-    while(fgets(buffer.data(), 128, pipe) != nullptr) {
+    while (fgets(buffer.data(), 128, pipe) != nullptr) {
         this->output.append(buffer.data());
     }
 
     // close pipe and get return code
     this->returnCode = pclose(pipe);
-    
-    std::cout << "Job " << this->GetUniqueID() << " has been executed" << std::endl;
+
+    std::cout << "Job " << this->GetUniqueID() << " has been executed"
+              << std::endl;
 }
 
 void CompileJob::JobCompleteCallback() {
-    std::cout << "Compile job " << this->GetUniqueID() << " Return code" << this->returnCode << std::endl;
-    std::cout << "Compile Job " << this->GetUniqueID() << " Output: \n" << this->output << std::endl;
+    std::cout << "Compile job " << this->GetUniqueID() << " Return code"
+              << this->returnCode << std::endl;
+    std::cout << "Compile Job " << this->GetUniqueID() << " Output: \n"
+              << this->output << std::endl;
 }

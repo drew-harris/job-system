@@ -24,7 +24,7 @@ JobSystem::~JobSystem() {
         m_workerThreads.pop_back();
     }
 
-    m_workerThreadsMutex.lock();
+    m_workerThreadsMutex.unlock();
 }
 
 JobSystem *JobSystem::CreateOrGet() {
@@ -96,7 +96,7 @@ JobStatus JobSystem::GetJobStatus(int jobId) const {
         status = m_jobHistory[jobId].m_jobStatus;
     }
 
-    return status;
+    retun status;
 }
 
 bool JobSystem::IsJobComplete(int jobId) const {
@@ -183,13 +183,13 @@ Job *JobSystem::claimAJob(unsigned long channels) {
     m_jobsQueuedMutex.lock();
     m_jobsRunningMutex.lock();
 
-    Job* claimedJob = nullptr;
+    Job *claimedJob = nullptr;
 
-    std::deque<Job*>::iterator queuedJobIter  = m_jobsQueued.begin();
+    std::deque<Job *>::iterator queuedJobIter = m_jobsQueued.begin();
     for (; queuedJobIter != m_jobsQueued.end(); ++queuedJobIter) {
-        Job* queuedJob = *queuedJobIter;
+        Job *queuedJob = *queuedJobIter;
 
-        if ((queuedJob->m_jobChannels & channels) != 0 ) {
+        if ((queuedJob->m_jobChannels & channels) != 0) {
             claimedJob = queuedJob;
 
             m_jobHistoryMutex.lock();

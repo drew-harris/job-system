@@ -1,8 +1,6 @@
-#pragma once
-#include "job.h"
-#include "jobworkerthread.h"
 #include <deque>
-
+#include <mutex>
+#include <vector>
 constexpr int JOB_TYPE_ANY = -1;
 
 class JobWorkerThread;

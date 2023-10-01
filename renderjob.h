@@ -1,3 +1,4 @@
+#pragma
 #include "job.h"
 #include <iostream>
 #include <ostream>
